@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Day 3 - Grid Solution</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+  </head>
+  <body>
+    <div class="register">
+      <img
+        width="64"
+        height="64"
+        src="https://img.icons8.com/arcade/64/test.png"
+        alt="test"
+      />
+      <h4>Student Portal</h4>
+
+      <h5>Create your academic profile to access exams.</h5>
+<!-- flex-column flex-wrap -->
+      <div class="names d-flex flex-column flex-wrap gap-3">
+        <div class="input-group">
+          <span class="input-group-text">First and Second name</span>
+          <input type="text" aria-label="First name" class="form-control" />
+          <input type="text" aria-label="Second name" class="form-control" />
+        </div>
+
+        <form>
+  <div class="mb-3">
+    <label  for="exampleInputEmail1" class="form-label d-flex flex-row">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+  </div>
+
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label d-flex flex-row">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1">
+  </div>
+
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label d-flex flex-row"> confirm Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1">
+  </div>
+
+  
+  <button type="submit" class="btn btn-primary">Create account</button>
+  <p> Already have an account? <a href="">login here</a></p>
+
+</form>
+
+      </div>
+    </div>
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+    <script src="Exam.js"></script>
+  </body>
+</html>

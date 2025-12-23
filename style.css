@@ -1,27 +1,19 @@
 body{
     margin:0 auto;
-    background-color: #eee;
+    background-color: #f1f1f1;
   }
   
-  nav {
-    background-color:#eee;
-    border: 20px ;
-    height: 30px;
-    padding: 10px;
-  }
   
-  h4, h5{
-    text-align: center;
-    margin-top: 1px;
-  }
   
+
   
   .register{
     text-align: center;
-    margin: 40px auto;
-    height: 400px;
+    margin: 0 auto;
+    padding: 11px;
+    height: 548px;
     width: 400px;
     background-color: rgb(255, 255, 255);
-    border: 5px solid black;
+    border: 3px solid black;
     /* background-color: rgb(87, 176, 211); */
 }
