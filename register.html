@@ -41,19 +41,23 @@
             <fieldset class="fieldset  bg-wight w-xs p-4">
                 <legend class="fieldset-legend font-bold text-2xl text-transform: capitalize">Register</legend>
 
-                <label class="label">First Name</label>
-                <input  type="First Name" class="input" placeholder="First Name" />
+               
+                <label class="label">Full Name</label>
+                <input  id="n"  type="text" class="input" placeholder="First and Last Name" required/>
 
-                <label class="label">Second Name</label>
-                <input type="Second Name" class="input" placeholder="Second Name" />
+                <!-- <label class="label">Last Name</label>
+                <input type="Last Name" class="input" placeholder="Last Name" /> -->
 
                 <label class="label">Email</label>
-                <input type="email" class="input" placeholder="Email" />
+                <input id="e" type="email" class="input" placeholder="Email" required/>
 
                 <label class="label">Password</label>
-                <input type="password" class="input" placeholder="Password" />
+                <input id="p" type="password" class="input" placeholder="Password" required/>
 
-                <button class="btn btn-neutral mt-4">Rigster</button>
+                <label class="label"> Confirm Password</label>
+                <input id="cp" type="password" class="input" placeholder="Confirm Password" required/>
+
+                <button id="register_button" class="btn btn-neutral mt-4">Rigster</button>
                 <a href="login.html" class="underline">Already has account?</a>
                 
             </fieldset>
@@ -72,6 +76,6 @@
 
     </div>
 
-    <!-- <script src="Exam.js"></script> -->
+<script src="register.js"></script>
   </body>
 </html>

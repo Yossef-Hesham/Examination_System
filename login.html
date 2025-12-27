@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register</title>
+    <title>Log in</title>
     <link rel="stylesheet" href="style.css"/>
 
     <link
@@ -42,12 +42,12 @@
                 <legend class="fieldset-legend font-bold text-2xl text-transform: capitalize">Log in</legend>
 
                 <label class="label">Email</label>
-                <input type="email" class="input" placeholder="Email" />
+                <input  id="login_e" type="email" class="input" placeholder="Email" required/>
 
                 <label class="label">Password</label>
-                <input type="password" class="input" placeholder="Password" />
+                <input id="login_p" type="password" class="input" placeholder="Password" required/>
 
-                <button class="btn btn-neutral mt-4">Log in</button>
+                <button id="login_button" class="btn btn-neutral mt-4">Log in</button>
                 <a href="register.html " class="underline">Register as a new user</a>
                 
             </fieldset>
@@ -56,16 +56,9 @@
 
         </div>
 
-  
-
-
-
-
-
-
 
     </div>
 
-    <!-- <script src="Exam.js"></script> -->
+    <script src="login.js"></script>
   </body>
 </html>
