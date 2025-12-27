@@ -12,15 +12,68 @@
   - Updates unanswered count text.
 */
 
-// -----------------------------------------------------------------------------------------------------
-/* ------------------ TIMER CONFIG ------------------ */
-var EXAM_DURATION_MINUTES = 1; // change easily later
-var totalTime = EXAM_DURATION_MINUTES * 60; // seconds
-var remainingTime = totalTime;
+if (sessionStorage.getItem("exam_finished") === "true") {
+  alert("This exam has already been submitted.");
+  // optionally redirect
+  window.location.href = "dashboard.html";
+}
+/* ------------------ DOM references ------------------ */
+var studentNameEl = document.getElementById("studentName");
+var studentIdEl = document.getElementById("studentId");
+var courseNameEl = document.getElementById("courseName");
+var courseInfoEl = document.getElementById("courseInfo");
+
+var currQuestionEl = document.getElementById("curr-question");
+var totalQuestionsEl = document.getElementById("total-questions");
+var questionTextEl = document.getElementById("question-text");
+var choicesEl = document.getElementById("choices");
+var trackerEl = document.getElementById("tracker");
+var unansweredTextEl = document.getElementById("unansweredText");
+
+var prevBtn = document.getElementById("prevBtn");
+var nextBtn = document.getElementById("nextBtn");
+var markBtn = document.getElementById("markBtn");
+var submitBtn = document.getElementById("submitBtn");
 
 var timerText = document.getElementById("timer");
 var timeBar = document.getElementById("timeBar");
 var timerBox = document.querySelector(".timer");
+
+var timeUpModal = document.getElementById("timeUpModal");
+var timeUpTitle = document.getElementById("timeUpTitle");
+var viewResultsBtn = document.getElementById("viewResultsBtn");
+var backDashboardBtn = document.getElementById("backDashboardBtn");
+
+
+// -----------------------------------------------------------------------------------------------------
+/* ------------------ Exam meta ------------------ */
+var userName = "Abdelaziz Hesham";
+var userId = 44812398;
+var courseName = "HTML 101 Final"
+var courseInfo = "Section 1 • Winter 2025"
+
+studentNameEl.textContent = userName;
+studentIdEl.textContent = "Student ID: " + userId; 
+courseNameEl.textContent = courseName;
+courseInfoEl.textContent = courseInfo;
+
+
+// -----------------------------------------------------------------------------------------------------
+/* ------------------ TIMER CONFIG ------------------ */
+
+var timerInterval = null;
+var EXAM_DURATION_MINUTES = 1; // change easily later
+var totalTime = EXAM_DURATION_MINUTES * 60; // seconds
+var remainingTime = totalTime;
+
+
+
+
+/* ---- refresh resilience keys ---- */
+var EXAM_END_KEY = "exam_end_time";
+var EXAM_STATE_KEY = "exam_state";
+var EXAM_INDEX_KEY = "exam_current_index";
+var EXAM_STARTED_KEY = "exam_started";
 
 
 function formatTime(seconds) {
@@ -58,30 +111,37 @@ function updateTimerUI() {
   }
 }
 
-
 function startTimer() {
-  updateTimerUI();
+  var now = Math.floor(new Date().getTime() / 1000);
+  var savedEnd = sessionStorage.getItem(EXAM_END_KEY);
 
-  var interval = setInterval(function () {
-    remainingTime--;
+  var endTime;
+  if (savedEnd) {
+    endTime = parseInt(savedEnd, 10);
+  } else {
+    endTime = now + totalTime;
+    sessionStorage.setItem(EXAM_END_KEY, endTime);
+  }
 
-    updateTimerUI();
+  function tick() {
+    var current = Math.floor(new Date().getTime() / 1000);
+    remainingTime = endTime - current;
 
     if (remainingTime <= 0) {
-      clearInterval(interval);
       remainingTime = 0;
       updateTimerUI();
+      showTimeUpModal();
 
-      alert("Time is up! Exam will be submitted.");
-      submitBtn.click(); // auto-submit
+      return;
     }
-  }, 1000);
+
+    updateTimerUI();
+  }
+
+  tick(); // initial render
+  timerInterval = setInterval(tick, 1000);
+
 }
-
-
-
-
-
 
 
 
@@ -203,18 +263,7 @@ for (var qi = 0; qi < questions.length; qi++) {
 }
 try { console.log(questionsState); } catch (e) {}
 
-/* ------------------ DOM references ------------------ */
-var currQuestionEl = document.getElementById("curr-question");
-var totalQuestionsEl = document.getElementById("total-questions");
-var questionTextEl = document.getElementById("question-text");
-var choicesEl = document.getElementById("choices");
-var trackerEl = document.getElementById("tracker");
-var unansweredTextEl = document.getElementById("unansweredText");
 
-var prevBtn = document.getElementById("prevBtn");
-var nextBtn = document.getElementById("nextBtn");
-var markBtn = document.getElementById("markBtn");
-var submitBtn = document.getElementById("submitBtn");
 
 /* ------------------ render total and tracker ------------------ */
 function renderTotals() {
@@ -407,24 +456,135 @@ function gradeExam() {
   };
 }
 
+function CloseAndGradeEaxm(){
+  sessionStorage.setItem("exam_finished", "true");
 
+  if (timerInterval) {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  }
 
-submitBtn.addEventListener("click", function () {
   var examResult = gradeExam();
   try { console.log("Exam Result:", examResult); } catch (e) {}
-  alert("You scored " + examResult.score + " out of " + examResult.totalQuestions);
+  sessionStorage.setItem("exam_result", JSON.stringify(examResult));
+
+}
+
+submitBtn.addEventListener("click", function () {
+
+  sessionStorage.removeItem(EXAM_END_KEY);
+  sessionStorage.removeItem(EXAM_STATE_KEY);
+  sessionStorage.removeItem(EXAM_INDEX_KEY);
+  sessionStorage.removeItem("exam_questions");
+
+  // optional: lock exam from reopening
+  CloseAndGradeEaxm();
+  // redirect to result page
+  window.location.href = "result.html";
 });
+
+
+function showTimeUpModal() {
+
+  CloseAndGradeEaxm();
+
+  timeUpTitle.textContent = "Time’s Up, " + userName.split(" ")[0] + "!";
+
+  // lock exam interactions
+  document.body.style.pointerEvents = "none";
+  timeUpModal.style.pointerEvents = "auto";
+
+  // show modal
+  timeUpModal.classList.remove("hidden");
+
+  
+  
+}
+
+
+
+
+
+var examModal = document.getElementById("examModal");
+var startExamBtn = document.getElementById("startExamBtn");
+var modalTotalT = document.getElementById("modal-time");
+var modalTotalQ = document.getElementById("modalTotalQ");
+
+/* ------------------ exam start modal logic ------------------ */
+function handleExamStartModal() {
+
+  // set total questions in modal
+  modalTotalQ.textContent = total;
+  modalTotalT.textContent = EXAM_DURATION_MINUTES;
+
+  // if exam already started, hide modal and start timer
+  if (sessionStorage.getItem(EXAM_STARTED_KEY) === "true") {
+    examModal.classList.add("hidden");
+    startTimer();
+    return;
+  }
+
+  // otherwise show modal
+  examModal.classList.remove("hidden");
+
+  startExamBtn.onclick = function () {
+    sessionStorage.setItem(EXAM_STARTED_KEY, "true");
+    examModal.classList.add("hidden");
+    startTimer();
+  };
+}
 
 
 /* ------------------ initialization ------------------ */
 function init() {
+  // restore saved state if exists
+  var savedState = sessionStorage.getItem(EXAM_STATE_KEY);
+  if (savedState) {
+    try {
+      var parsed = JSON.parse(savedState);
+      if (parsed && parsed.length === questionsState.length) {
+        for (var i = 0; i < parsed.length; i++) {
+          questionsState[i] = parsed[i];
+        }
+      }
+    } catch (e) {}
+  }
+
+  // restore current question index
+  var savedIndex = sessionStorage.getItem(EXAM_INDEX_KEY);
+  if (savedIndex !== null) {
+    currentIndex = parseInt(savedIndex, 10) || 0;
+  }
+
+
   renderTotals();
   renderTracker();
   renderQuestion();
-  startTimer(); // ⏱️ start here
+ /* -------- modal & timer control -------- */
+  handleExamStartModal();
+  
 
-  // optionally persist questionsState to sessionStorage so it survives refresh
-  setInterval(function () { sessionStorage.setItem('exam_state', JSON.stringify(questionsState)); }, 2000);
+  // persist periodically
+  setInterval(function () {
+    sessionStorage.setItem(EXAM_STATE_KEY, JSON.stringify(questionsState));
+    sessionStorage.setItem(EXAM_INDEX_KEY, currentIndex);
+  }, 2000);
+
 }
 
 init();
+
+
+
+
+// TimeUp modal Navigation
+viewResultsBtn.addEventListener("click", function () {
+  // redirect to result page
+  window.location.href = "result.html";
+});
+
+backDashboardBtn.addEventListener("click", function () {
+  // clear exam-related storage
+  sessionStorage.clear();
+  window.location.href = "dashboard.html";
+});

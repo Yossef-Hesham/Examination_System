@@ -13,8 +13,8 @@
         <div class="exam-info">
           <div class="icon">🎓</div>
           <div>
-            <h3>Calculus 101 Final</h3>
-            <p>Section 4 • Fall 2023</p>
+            <h3 id="courseName">Calculus 101 Final</h3>
+            <p id="courseInfo">Section 4 • Fall 2023</p>
           </div>
         </div>
 
@@ -22,8 +22,8 @@
 
         <div>
           <div class="student-info">
-            <h4>Alex Morgan</h4>
-            <p>Student ID: 884210</p>
+            <h4 id="studentName">Alex Morgan</h4>
+            <p id="studentId">Student ID: 884210</p>
           </div>
           <button class="sidebar-toggle btn outline hidden" id="toggleSidebar">
             ☰ Questions
@@ -83,11 +83,61 @@
           </div>
 
           <div class="submit-box">
-            <button id="submitBtn" class="submit">✔ Submit Exam</button>
+            <button id="submitBtn" class="submit btn">✔ Submit Exam</button>
             <p id="unansweredText">You have 15 unanswered questions.</p>
           </div>
         </aside>
       </main>
+    </div>
+    <!-- Exam Start Modal -->
+    <div class="exam-modal" id="examModal">
+      <div class="exam-modal-card">
+        <div class="modal-icon">📝</div>
+
+        <h2 id="mCourseName">Calculus 101 – Final Exam</h2>
+        <p class="modal-sub" id="mCourseInfo">Section 4 • Fall 2023</p>
+
+        <div class="modal-info">
+          <div>
+            <strong>Duration:</strong> <span id="modal-time">45</span> Minutes
+          </div>
+          <div>
+            <strong>Total Questions:</strong> <span id="modalTotalQ">15</span>
+          </div>
+        </div>
+
+        <p class="modal-note">
+          Once you start, the timer will begin and cannot be paused. Make sure
+          you are ready.
+        </p>
+
+        <button class="btn primary modal-start" id="startExamBtn">
+          ▶ Start Exam
+        </button>
+      </div>
+    </div>
+
+    <!-- Time Up Modal -->
+    <div class="exam-modal hidden" id="timeUpModal">
+      <div class="exam-modal-card timeup-card">
+        <div class="timeup-icon">⏳</div>
+
+        <h2 id="timeUpTitle">Time's Up!</h2>
+
+        <p class="timeup-msg">
+          The allocated time for this examination has expired.
+          <br />
+          Don’t worry, we automatically saved your last answer.
+        </p>
+
+        <div class="timeup-actions">
+          <button class="btn primary" id="viewResultsBtn">View Results</button>
+
+          <button class="btn outline" id="backDashboardBtn">
+            Return to Dashboard
+          </button>
+        </div>
+      </div>
     </div>
 
     <script src="js/exam.js"></script>
