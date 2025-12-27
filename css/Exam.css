@@ -42,6 +42,14 @@ body {
     justify-content: center;
 }
 
+
+.student-info {
+    text-align: right;
+}
+
+/* ======================================================
+   TIMER + PROGRESS BAR
+====================================================== */
 .timer {
     background: #fee2e2;
     color: #b91c1c;
@@ -50,8 +58,39 @@ body {
     font-weight: 600;
 }
 
-.student-info {
-    text-align: right;
+/* Progress bar container */
+.time-bar {
+    width: 100%;
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+/* Progress bar fill */
+.time-bar-fill {
+    height: 100%;
+    width: 100%;
+    background: #16a34a; /* green initially */
+    border-radius: 999px;
+    transition: width 1s linear, background-color 0.6s ease;
+}
+
+/* Timer color states */
+.timer.green {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.timer.yellow {
+    background: #fef9c3;
+    color: #92400e;
+}
+
+.timer.red {
+    background: #fee2e2;
+    color: #991b1b;
 }
 
 
@@ -300,3 +339,10 @@ body {
 .hidden {
     display: none;
 }
+
+
+
+
+
+
+
