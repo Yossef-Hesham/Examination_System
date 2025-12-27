@@ -1,0 +1,302 @@
+/* ======================================================
+   1. RESET & BASE
+====================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+body {
+    background: #f7f8fb;
+    color: #111827;
+}
+
+
+/* ======================================================
+   2. HEADER
+====================================================== */
+.header {
+    background: #ffffff;
+    padding: 18px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.exam-info {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+}
+
+.icon {
+    width: 42px;
+    height: 42px;
+    background: #eef2ff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timer {
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.student-info {
+    text-align: right;
+}
+
+
+/* ======================================================
+   3. MAIN LAYOUT
+====================================================== */
+.content {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 24px;
+    padding: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+
+/* ======================================================
+   4. QUESTION CARD
+====================================================== */
+.question-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 32px;
+    border: 1px solid #e5e7eb;
+    min-height: 620px; /* ensures consistent height */
+    display: flex;
+    flex-direction: column;
+}
+
+.question-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.pill {
+    background: #eef2ff;
+    color: #2563eb;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.question-text {
+    font-size: 26px;
+    line-height: 1.35;
+    margin-bottom: 28px;
+}
+
+
+/* ======================================================
+   5. CHOICES (MCQ + TF SAME HEIGHT)
+====================================================== */
+.choices {
+    display: grid;
+    grid-template-rows: repeat(4, 1fr); /* forces same height */
+    gap: 16px;
+    flex-grow: 1;
+}
+
+.choice {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px;
+    border: 2px solid #e5e7eb;
+    border-radius: 14px;
+    cursor: pointer;
+    background: #fafafa;
+    transition: 0.12s ease;
+}
+
+.choice:hover {
+    transform: translateY(-2px);
+    border-color: #c7d2fe;
+}
+
+.choice.selected {
+    border-color: #2563eb;
+    background: #eef2ff;
+}
+
+.letter {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid #2563eb;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+
+/* ======================================================
+   6. ACTION BUTTONS
+====================================================== */
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 32px;
+}
+
+.btn {
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+.outline {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+}
+
+.warn {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.primary {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+
+/* ======================================================
+   7. SIDEBAR
+====================================================== */
+.sidebar {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+}
+
+.legend {
+    display: flex;
+    gap: 14px;
+    font-size: 13px;
+    margin: 14px 0;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+.answered-dot { background: #2563eb; }
+.marked-dot   { background: #f59e0b; }
+.unseen-dot   { background: #d1d5db; }
+
+
+/* ======================================================
+   8. TRACKER GRID
+====================================================== */
+.tracker {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.q {
+    height: 44px;
+    border-radius: 10px;
+    border: none;
+    background: #f1f5f9;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.q.answered { background: #2563eb; color: #000000; }
+.q.marked   { background: #f59e0b; color: #000000; }
+.q.current  { border: 2px solid #2563eb; background: #fff; }
+
+
+/* ======================================================
+   9. SUBMIT
+====================================================== */
+.submit-box {
+    margin-top: auto;
+}
+
+.submit {
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    background: #16a34a;
+    color: white;
+    border: none;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.submit-box p {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+
+/* ======================================================
+   10. RESPONSIVE (SIDEBAR POPUP)
+====================================================== */
+@media (max-width: 992px) {
+
+    .content {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: fixed;
+        right: -100%;
+        top: 0;
+        height: 100vh;
+        width: 320px;
+        z-index: 1000;
+        transition: right 0.3s ease;
+        box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+    }
+
+    .sidebar.open {
+        right: 0;
+    }
+
+    .sidebar-toggle {
+        display: inline-flex;
+    }
+}
+
+
+/* ======================================================
+   11. UTILITIES
+====================================================== */
+.hidden {
+    display: none;
+}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Exam</title>
+    <link rel="stylesheet" href="css/Exam.css" />
+  </head>
+  <body>
+    <div class="page">
+      <!-- Header -->
+      <header class="header">
+        <div class="exam-info">
+          <div class="icon">🎓</div>
+          <div>
+            <h3>Calculus 101 Final</h3>
+            <p>Section 4 • Fall 2023</p>
+          </div>
+        </div>
+
+        <div class="timer">⏱ <span id="timer">00 : 45 : 23</span></div>
+
+        <div>
+          <div class="student-info">
+            <h4>Alex Morgan</h4>
+            <p>Student ID: 884210</p>
+          </div>
+          <button class="sidebar-toggle btn outline hidden" id="toggleSidebar">
+            ☰ Questions
+          </button>
+        </div>
+      </header>
+
+      <!-- Main content -->
+      <main class="content">
+        <!-- Question card -->
+        <section class="question-card">
+          <div class="question-meta">
+            <span class="pill">
+              <span id="curr-question">Question 1</span> of
+              <span id="total-questions">15</span>
+            </span>
+            <span class="report">⚑ Report Issue</span>
+          </div>
+
+          <h1 class="question-text" id="question-text">
+            <!-- filled by JS -->
+          </h1>
+
+          <div class="choices" id="choices">
+            <!-- filled by JS -->
+          </div>
+
+          <div class="actions">
+            <button id="prevBtn" class="btn outline">← Previous</button>
+            <button id="markBtn" class="btn warn">⚑ Mark for Review</button>
+            <button id="nextBtn" class="btn primary">Next →</button>
+          </div>
+        </section>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <h3>Question Tracker</h3>
+
+          <div class="legend">
+            <span class="legend-item"
+              ><span class="dot answered-dot"></span> Answered</span
+            >
+            <span class="legend-item"
+              ><span class="dot marked-dot"></span> Marked</span
+            >
+            <span class="legend-item"
+              ><span class="dot unseen-dot"></span> Unseen</span
+            >
+          </div>
+
+          <div class="tracker" id="tracker">
+            <!-- tracker buttons created by JS -->
+          </div>
+
+          <div class="submit-box">
+            <button id="submitBtn" class="submit">✔ Submit Exam</button>
+            <p id="unansweredText">You have 15 unanswered questions.</p>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <script src="js/exam.js"></script>
+  </body>
+</html>
