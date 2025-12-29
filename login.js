@@ -1,28 +1,44 @@
+var login_button = document.getElementById("login_button");
 
+function validate_login() {
+    var email = document.getElementById('login_e').value;
+    var password = document.getElementById('login_p').value;
 
+    // Reset errors
+    document.getElementById('emailError').innerText = '';
+    document.getElementById('passwordError').innerText = '';
 
+    var flag = true;
 
-function prevent_nums(){
+    if (email == '') {
+        document.getElementById('emailError').innerText = 'Email is required';
+        flag = false;
+    }
 
-    
+    if (password == '') {
+        document.getElementById('passwordError').innerText = 'Password is required';
+        flag = false;
+    }
 
+    if (flag) {
 
+        if(window.localStorage['email'] === email &&
+            window.localStorage['password'] === password)
+            
+            console.log("log in successful!")
+        else 
+            document.getElementById('log_failed').innerText = 'email or password is wrong, please try again';
+            // alert("email or password is wrong, please try again");
+    }
 }
 
 
 
-
-var login_button = document.getElementById("login_button");
-var login_email = document.getElementById("login_e");
-var login_pass = document.getElementById("login_p");
-
  login_button.addEventListener("click", function (e) {
-     e.preventDefault(); 
-     if(window.localStorage['email'] === login_email.value &&
-         window.localStorage['password'] === login_pass.value
-     )
-         console.log("yes");
-     else 
-         console.log("no");
+        e.preventDefault(); 
+        validate_login();
+
+
+
 
 });
