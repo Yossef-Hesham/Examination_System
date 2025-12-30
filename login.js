@@ -21,14 +21,16 @@ function validate_login() {
     }
 
     if (flag) {
-
-        if(window.localStorage['email'] === email &&
-            window.localStorage['password'] === password)
-            
-            console.log("log in successful!")
-        else 
-            document.getElementById('log_failed').innerText = 'email or password is wrong, please try again';
-            // alert("email or password is wrong, please try again");
+        if (
+            window.localStorage['email'] === email &&
+            window.localStorage['password'] === password
+            ) {
+            console.log("log in successful!");
+            } else {
+            document.getElementById('log_failed').innerText =
+                'Email or password is wrong, please try again';
+            }
+        
     }
 }
 
@@ -37,8 +39,4 @@ function validate_login() {
  login_button.addEventListener("click", function (e) {
         e.preventDefault(); 
         validate_login();
-
-
-
-
 });
