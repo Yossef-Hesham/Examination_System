@@ -1,0 +1,325 @@
+/* =====================
+   Base / Variables
+===================== */
+:root {
+  --bg: #f7f8fb;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --success: #16a34a;
+  --danger: #dc2626;
+  --warn: #f59e0b;
+  --radius: 14px;
+  --maxw: 960px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: var(--bg);
+  color: #111827;
+}
+
+/* =====================
+   Page Layout
+===================== */
+.page {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* =====================
+   Navbar
+===================== */
+.header {
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.exam-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #eef2ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  cursor: pointer;
+}
+
+.user-name {
+  text-align: right;
+  font-size: 14px;
+}
+
+.user-name small {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #e5e7eb;
+}
+
+/* Dropdown */
+.user-dropdown {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+  padding: 8px;
+  min-width: 140px;
+  z-index: 20;
+}
+
+.user-dropdown button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.user-dropdown button:hover {
+  background: #f1f5f9;
+}
+
+.hidden { display: none; }
+
+/* =====================
+   Main Content
+===================== */
+.main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 32px 16px;
+}
+
+/* =====================
+   Result Card
+===================== */
+.card {
+  width: 100%;
+  max-width: var(--maxw);
+  background: var(--card);
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  gap: 32px;
+  border: 1px solid #e5e7eb;
+}
+
+/* Left */
+.left {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Right */
+.right {
+  flex: 1;
+}
+
+/* Headings */
+h1 {
+  margin: 0 0 15px;
+  font-size: 24px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+/* =====================
+   Score Ring
+===================== */
+.score-wrap {
+  width: 220px;
+  height: 220px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-value {
+  position: absolute;
+  text-align: center;
+  font-weight: 800;
+  font-size: 28px;
+}
+
+.score-label {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+/* =====================
+   Stats
+===================== */
+.stats {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.stat {
+  flex: 1;
+  padding: 12px;
+  background: #fbfdff;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid #eef4fa;
+}
+
+.stat .num {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.stat .label {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* =====================
+   Performance Bar
+===================== */
+.perf-row {
+  margin-top: 30px;
+  margin-bottom: 20px;
+
+}
+
+.perf-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.perf-track {
+  height: 12px;
+  background: #f1f5f9;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.perf-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transition: width 1s ease;
+}
+
+/* =====================
+   Actions
+===================== */
+.actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: #fff;
+  padding: 15px 30px;
+}
+.btn.primary:hover{
+  background:#fff;
+  color:var(--accent);
+  border: 2px solid var(--accent);
+}
+
+.btn.ghost {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  color: var(--muted);
+}
+
+/* =====================
+   Loader Overlay
+===================== */
+.loader-wrap {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loader-wrap.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* =====================
+   Responsive
+===================== */
+@media (max-width: 900px) {
+  .card {
+    flex-direction: column;
+    align-items: center;
+  }
+  .left {
+    width: 100%;
+  }
+}
