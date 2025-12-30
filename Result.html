@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Exam Result</title>
+    <style>
+      /* ============= base (keeps consistent with your light theme) ============= */
+      :root {
+        --bg: #f7f8fb;
+        --card: #ffffff;
+        --muted: #6b7280;
+        --accent: #2563eb;
+        --success: #16a34a;
+        --danger: #dc2626;
+        --warn: #f59e0b;
+        --glass: rgba(255, 255, 255, 0.7);
+        --radius: 14px;
+        --maxw: 900px;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 28px;
+        color: #111827;
+      }
+
+      /* ============= loader overlay ============= */
+      .loader-wrap {
+        position: fixed;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.3s ease, visibility 0.3s;
+      }
+      .loader-wrap.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .loader {
+        width: 160px;
+        height: 160px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.9),
+          rgba(246, 247, 250, 0.9)
+        );
+        border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(16, 24, 40, 0.08);
+        border: 1px solid #eef2f7;
+        padding: 18px;
+      }
+
+      .ring {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        margin-bottom: 12px;
+        position: relative;
+      }
+
+      .spinner {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 8px solid rgba(0, 0, 0, 0.05);
+        border-top-color: var(--accent);
+        animation: spin 1s linear infinite;
+        box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.02);
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .loader p {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      /* ============= result card ============= */
+      .card {
+        width: 100%;
+        max-width: var(--maxw);
+        background: var(--card);
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 18px 60px rgba(17, 24, 39, 0.04);
+        border: 1px solid #e9eef3;
+        display: flex;
+        gap: 28px;
+        align-items: flex-start;
+      }
+
+      .left {
+        flex: 0 0 380px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      h1 {
+        font-size: 24px;
+        margin: 4px 0 6px;
+      }
+      .subtitle {
+        color: var(--muted);
+        margin-bottom: 14px;
+        font-size: 14px;
+      }
+
+      /* ============= score ring (SVG) ============= */
+      .score-wrap {
+        width: 220px;
+        height: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      .score-value {
+        position: absolute;
+        text-align: center;
+        font-weight: 800;
+        font-size: 28px;
+        color: #0f172a;
+      }
+      .score-label {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 700;
+        margin-top: 6px;
+        text-align: center;
+      }
+
+      /* ============= stats boxes ============= */
+      .stats {
+        margin-top: 18px;
+        width: 100%;
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+      }
+
+      .stat {
+        flex: 1;
+        background: #fbfdff;
+        border-radius: 12px;
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #eef4fa;
+      }
+      .stat .num {
+        font-weight: 800;
+        font-size: 20px;
+        color: #0f172a;
+      }
+      .stat .label {
+        color: var(--muted);
+        font-size: 13px;
+        margin-top: 6px;
+      }
+
+      /* ============= performance bar ============= */
+      .perf-row {
+        margin-top: 20px;
+      }
+      .perf-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .perf-track {
+        background: #f1f5f9;
+        height: 12px;
+        border-radius: 999px;
+        overflow: hidden;
+        border: 1px solid #eef2f7;
+      }
+      .perf-fill {
+        height: 100%;
+        width: 0%;
+        background: var(--accent);
+        transition: width 1s ease, background-color 0.4s ease;
+      }
+      .grade-label {
+        font-weight: 700;
+        font-size: 13px;
+        color: var(--muted);
+        margin-left: 8px;
+      }
+
+      /* ============= actions ============= */
+      .actions {
+        margin-top: 20px;
+        display: flex;
+        gap: 12px;
+      }
+
+      .btn {
+        border-radius: 12px;
+        padding: 12px 18px;
+        cursor: pointer;
+        border: none;
+        font-weight: 700;
+        font-size: 14px;
+      }
+      .btn.primary {
+        background: var(--accent);
+        color: #fff;
+        box-shadow: 0 8px 18px rgba(37, 99, 235, 0.18);
+      }
+      .btn.ghost {
+        background: transparent;
+        color: var(--muted);
+        border: 1px solid #edf2f8;
+      }
+
+      /* ============= small note ============= */
+      .note {
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      /* ============= responsive ============= */
+      @media (max-width: 920px) {
+        .card {
+          flex-direction: column;
+          align-items: center;
+          padding: 22px;
+        }
+        .left {
+          order: 2;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          margin-top: 10px;
+        }
+        .right {
+          order: 1;
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- loader shown first -->
+    <div class="loader-wrap" id="loaderWrap">
+      <div class="loader" role="status" aria-live="polite">
+        <div class="ring">
+          <div class="spinner" id="loaderSpinner"></div>
+        </div>
+        <p>Calculating your results…</p>
+      </div>
+    </div>
+
+    <!-- result card -->
+    <div class="card" id="resultCard" style="display: none">
+      <div class="left">
+        <div class="score-wrap" aria-hidden="true">
+          <!-- SVG circle ring -->
+          <svg
+            id="scoreRing"
+            width="220"
+            height="220"
+            viewBox="0 0 120 120"
+            style="transform: rotate(-90deg)"
+          >
+            <circle
+              cx="60"
+              cy="60"
+              r="50"
+              stroke="#eef2f7"
+              stroke-width="10"
+              fill="none"
+            ></circle>
+            <circle
+              id="scoreArc"
+              cx="60"
+              cy="60"
+              r="50"
+              stroke="#2563eb"
+              stroke-width="10"
+              stroke-linecap="round"
+              fill="none"
+              stroke-dasharray="314.159"
+              stroke-dashoffset="314.159"
+            ></circle>
+          </svg>
+          <div class="score-value" id="scoreText">
+            0%<span
+              style="
+                display: block;
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--muted);
+              "
+              >SCORE</span
+            >
+          </div>
+        </div>
+
+        <div class="score-label" id="scoreLabel">Great Job!</div>
+      </div>
+
+      <div class="right">
+        <h1 id="title">Great Job!</h1>
+        <div class="subtitle" id="subtitle">
+          You have successfully completed the exam.
+        </div>
+
+        <div class="stats" aria-live="polite" id="statsRow">
+          <div class="stat">
+            <div class="num" id="correctNum">0</div>
+            <div class="label">CORRECT</div>
+          </div>
+          <div class="stat">
+            <div class="num" id="incorrectNum">0</div>
+            <div class="label">INCORRECT</div>
+          </div>
+          <div class="stat">
+            <div class="num" id="timeTaken">0m</div>
+            <div class="label">TIME TAKEN</div>
+          </div>
+        </div>
+
+        <div class="perf-row">
+          <div class="perf-head">
+            <div>PERFORMANCE</div>
+            <div class="grade-label" id="passingLabel">Passing Grade: 70%</div>
+          </div>
+          <div class="perf-track" aria-hidden="true">
+            <div class="perf-fill" id="perfFill" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <div class="note" id="resultNote">
+          Your answers were auto-saved. You can finish and exit when ready.
+        </div>
+
+        <div class="actions">
+          <button class="btn ghost" id="finishBtn">Finish & Exit</button>
+          <button class="btn primary" id="exitBtn">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/Result.js"></script>
+  </body>
+</html>

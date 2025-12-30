@@ -70,10 +70,15 @@ var remainingTime = totalTime;
 
 
 /* ---- refresh resilience keys ---- */
+var EXAM_STARTED_KEY = "exam_started";
+var EXAM_START_TIME = "exam_start_time";
 var EXAM_END_KEY = "exam_end_time";
 var EXAM_STATE_KEY = "exam_state";
+var EXAM_DURATION_MINUTES_st = "exam_duration_minutes"
 var EXAM_INDEX_KEY = "exam_current_index";
-var EXAM_STARTED_KEY = "exam_started";
+
+
+
 
 
 function formatTime(seconds) {
@@ -120,7 +125,11 @@ function startTimer() {
     endTime = parseInt(savedEnd, 10);
   } else {
     endTime = now + totalTime;
+    sessionStorage.setItem(EXAM_START_TIME,now);
+    sessionStorage.setItem(EXAM_DURATION_MINUTES_st , EXAM_DURATION_MINUTES)
     sessionStorage.setItem(EXAM_END_KEY, endTime);
+    sessionStorage.setItem(EXAM_STARTED_KEY, "true");
+
   }
 
   function tick() {
@@ -205,6 +214,7 @@ function loadQuestionsFromStorageOrDefault() {
     try { console.warn("Could not parse exam_questions from sessionStorage, falling back to defaults.", e); } catch (ee) {}
   }
   try { console.log("Loaded Defualt Exam."); } catch (e) {}
+  sessionStorage.setItem("exam_questions",JSON.stringify(defaultQuestions));
   return defaultQuestions;
 }
 
@@ -448,7 +458,7 @@ function gradeExam() {
   };
 }
 
-function CloseAndGradeEaxm(){
+function CloseExam(){
   sessionStorage.setItem("exam_finished", "true");
 
   if (timerInterval) {
@@ -456,23 +466,14 @@ function CloseAndGradeEaxm(){
   timerInterval = null;
   }
 
-  var examResult = gradeExam();
-  try { console.log("Exam Result:", examResult); } catch (e) {}
-  sessionStorage.setItem("exam_result", JSON.stringify(examResult));
-
 }
 
 submitBtn.addEventListener("click", function () {
 
-  sessionStorage.removeItem(EXAM_END_KEY);
-  sessionStorage.removeItem(EXAM_STATE_KEY);
-  sessionStorage.removeItem(EXAM_INDEX_KEY);
-  sessionStorage.removeItem("exam_questions");
-
   // optional: lock exam from reopening
-  CloseAndGradeEaxm();
+  CloseExam();
   // redirect to result page
-  window.location.href = "result.html";
+  window.location.href = "Result.html";
 });
 
 
@@ -517,7 +518,6 @@ function handleExamStartModal() {
   examModal.classList.remove("hidden");
 
   startExamBtn.onclick = function () {
-    sessionStorage.setItem(EXAM_STARTED_KEY, "true");
     examModal.classList.add("hidden");
     startTimer();
   };
