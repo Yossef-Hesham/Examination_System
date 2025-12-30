@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log in</title>
+    <link rel="stylesheet" href="style.css"/>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    
+  </head>
+  <body>
+    
+
+
+    <div class="register flex flex-col flex-wrap gap-19">
+      <!-- logo part -->
+        <div class="">
+
+            <img width="50" height="50" src="https://img.icons8.com/officel/80/technology.png" alt="technology"/>
+        </div>
+
+        <!-- body part -->
+        <div class="flex flex-row flex-wrap gap-10 w-full"> 
+
+        <!-- new sec -->
+        <!-- left part -->
+        <div>
+          <img class="mt-16 mr-32 bg-red-400 dis hidden xl:block" width="400" height="300" src="regis_log_pic.png" alt="Exam pic"/>
+
+        </div>
+
+        <!-- right part -->
+        <div class="pb-16">
+            <fieldset class="fieldset  bg-wight w-xs p-4 mt-16">
+                <legend class="fieldset-legend font-bold text-2xl text-transform: capitalize">Log in</legend>
+
+                <label class="label font-bold">Email</label>
+                <input  id="login_e" type="email" class="input" placeholder="Email" required/>
+                <span id="emailError"  style="color:red" ></span>
+
+                <label class="label font-bold">Password</label>
+                <input id="login_p" type="password" class="input" placeholder="Password" required/>
+                <span id="passwordError"  style="color:red"></span>
+
+
+                <button id="login_button " class="btn btn-lg btn-primary bg-blue-500 ">Log in</button>
+                <!-- <span id="log_success"  style="color:red" class="font-bold" ></span> -->
+                <span id="log_failed"  style="color:red" class="font-bold" ></span>
+
+                <a href="register.html " class="underline">Register as a new user</a>
+
+                
+            </fieldset>
+        </div>
+
+
+        </div>
+
+
+    </div>
+
+    <script src="login.js"></script>
+  </body>
+</html>

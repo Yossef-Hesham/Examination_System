@@ -1,0 +1,13 @@
+.register{
+    text-align: center;
+    margin: 40px auto;
+    height: 440px;
+    /* margin: 130 auto; */
+    padding: 22px;
+    height: 590px;
+    width: 1070px;
+    background-color: rgb(255, 255, 255);
+    /* border: 3px solid black; */
+    box-shadow: 2px 2px 16px 0px rgb(60, 59, 60);
+  
+}
