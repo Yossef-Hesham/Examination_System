@@ -62,7 +62,7 @@ courseInfoEl.textContent = courseInfo;
 /* ------------------ TIMER CONFIG ------------------ */
 
 var timerInterval = null;
-var EXAM_DURATION_MINUTES = 1; // change easily later
+var EXAM_DURATION_MINUTES = 30; // change easily later
 var totalTime = EXAM_DURATION_MINUTES * 60; // seconds
 var remainingTime = totalTime;
 
@@ -341,13 +341,7 @@ function renderQuestion() {
 
       var letter = document.createElement("span");
       letter.className = "letter";
-      // letter label for TF vs MCQ
-      if (q.type === "mcq") {
-        // letters A,B,C,D...
-        letter.textContent = String.fromCharCode(65 + cIdx);
-      } else {
-        letter.textContent = (q.choices.length === 2 ? (cIdx === 0 ? "T" : "F") : String.fromCharCode(65 + cIdx));
-      }
+      letter.textContent = String.fromCharCode(65 + cIdx);
 
       var textSpan = document.createElement("span");
       textSpan.textContent = " " + q.choices[cIdx];
@@ -359,7 +353,6 @@ function renderQuestion() {
       choiceDiv.addEventListener("click", function () {
         questionsState[currentIndex].answer = cIdx;
         questionsState[currentIndex].status = 'answered';
-        // if previously marked, keep marked flag true (mark is separate)
         // update UI
         // remove selected from other choices
         var all = choicesEl.querySelectorAll(".choice");
@@ -370,7 +363,7 @@ function renderQuestion() {
             else el.className += " selected";
           } else {
             if (el.classList) el.classList.remove("selected");
-            else el.className = el.className.replace(/\bselected\b/g, "");
+            else el.className = el.className.replace("selected", "").trim();
           }
         }
         // update tracker button
@@ -422,8 +415,7 @@ markBtn.addEventListener("click", function () {
   s.marked = !s.marked;
   var trackerBtn = trackerEl.querySelector('button[data-index="' + currentIndex + '"]');
   if (trackerBtn) updateTrackerButtonClass(trackerBtn, currentIndex);
-  //   // visual feedback: toggle a subtle class on mark button
-  //   markBtn.textContent = s.marked ? "⚑ Marked" : "⚑ Mark for Review";
+
   Mark_Check(s);
 });
 
@@ -500,9 +492,6 @@ function showTimeUpModal() {
   
   
 }
-
-
-
 
 
 var examModal = document.getElementById("examModal");
