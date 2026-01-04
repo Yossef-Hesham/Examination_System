@@ -20,7 +20,7 @@ function validate_login() {
         flag = false;
     }
 
-    if (flag) {
+    
         if (
             window.localStorage['email'] === email &&
             window.localStorage['password'] === password
@@ -32,7 +32,7 @@ function validate_login() {
                 'Email or password is wrong, please try again';
             }
         
-    }
+    
     return flag;
 }
 

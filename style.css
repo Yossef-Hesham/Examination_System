@@ -1,13 +1,12 @@
 .register{
     text-align: center;
-    margin: 40px auto;
-    height: 440px;
-    /* margin: 130 auto; */
+
+    margin-top: 35px;
+    margin-bottom: 35px;
     padding: 22px;
-    height: 590px;
-    width: 1070px;
+    height: 85%;
+    width: 85%;
     background-color: rgb(255, 255, 255);
     /* border: 3px solid black; */
     box-shadow: 2px 2px 16px 0px rgb(60, 59, 60);
-  
 }
