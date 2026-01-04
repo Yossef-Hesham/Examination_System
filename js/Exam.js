@@ -12,6 +12,14 @@
   - Updates unanswered count text.
 */
 
+// Push a new state into history
+  history.pushState(null, null, location.href);
+
+  // Listen for back/forward navigation
+  window.onpopstate = function () {
+    history.go(1); // forces staying on the current page
+  };
+
 if (sessionStorage.getItem("exam_finished") === "true") {
   alert("This exam has already been submitted.");
   // optionally redirect
@@ -47,13 +55,13 @@ var backDashboardBtn = document.getElementById("backDashboardBtn");
 
 // -----------------------------------------------------------------------------------------------------
 /* ------------------ Exam meta ------------------ */
-var userName = "Abdelaziz Hesham";
+var userName = sessionStorage.getItem("user_name")||"Abdelaziz Hesham";
 var userId = 44812398;
 var courseName = "HTML 101 Final"
 var courseInfo = "Section 1 • Winter 2025"
 
 studentNameEl.textContent = userName;
-studentIdEl.textContent = "Student ID: " + userId; 
+// studentIdEl.textContent = "Student ID: " + userId; 
 courseNameEl.textContent = courseName;
 courseInfoEl.textContent = courseInfo;
 
@@ -62,7 +70,7 @@ courseInfoEl.textContent = courseInfo;
 /* ------------------ TIMER CONFIG ------------------ */
 
 var timerInterval = null;
-var EXAM_DURATION_MINUTES = 30; // change easily later
+var EXAM_DURATION_MINUTES = 0.5; // change easily later
 var totalTime = EXAM_DURATION_MINUTES * 60; // seconds
 var remainingTime = totalTime;
 
@@ -479,7 +487,7 @@ submitBtn.addEventListener("click", function () {
 
 function showTimeUpModal() {
 
-  CloseAndGradeEaxm();
+  CloseExam();
 
   timeUpTitle.textContent = "Time’s Up, " + userName.split(" ")[0] + "!";
 

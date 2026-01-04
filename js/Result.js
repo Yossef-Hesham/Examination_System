@@ -8,6 +8,14 @@ result.html JS (ES5)
 - Defensive: falls back to defaults if keys are missing
 */
 
+// Push a new state into history
+  history.pushState(null, null, location.href);
+
+  // Listen for back/forward navigation
+  window.onpopstate = function () {
+    history.go(1); // forces staying on the current page
+  };
+
 /* ------------------ helper utilities ------------------ */
 function safeParseJSON(s) {
 try {
@@ -35,7 +43,7 @@ var rawState = safeParseJSON(sessionStorage.getItem("exam_state")) || [];
 console.log(rawQuestions);
 console.log(rawState);
 /* optional metadata */
-var studentName = sessionStorage.getItem("student_name") || null;
+var studentName = sessionStorage.getItem("user_name") || null;
 var studentId = sessionStorage.getItem("student_id") || null;
 
 /* duration (minutes) fallback */
@@ -319,7 +327,7 @@ try {
     sessionStorage.removeItem("exam_finished");
 } catch (e) {}
 // go back to dashboard or home
-window.location.href = "dashboard.html";
+window.location.href = "login.html";
 };
 
 

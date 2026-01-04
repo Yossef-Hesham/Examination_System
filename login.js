@@ -8,7 +8,7 @@ function validate_login() {
     document.getElementById('emailError').innerText = '';
     document.getElementById('passwordError').innerText = '';
 
-    var flag = true;
+    var flag = false;
 
     if (email == '') {
         document.getElementById('emailError').innerText = 'Email is required';
@@ -25,6 +25,7 @@ function validate_login() {
             window.localStorage['email'] === email &&
             window.localStorage['password'] === password
             ) {
+            flag = true;
             console.log("log in successful!");
             } else {
             document.getElementById('log_failed').innerText =
@@ -32,11 +33,19 @@ function validate_login() {
             }
         
     }
+    return flag;
 }
 
 
 
+// history.pushState(null,"",location.href);
+// window.history.forward();
  login_button.addEventListener("click", function (e) {
         e.preventDefault(); 
-        validate_login();
+        var flag = validate_login();
+        if(flag){
+            sessionStorage.setItem("user_name",window.localStorage['name'] );
+            window.location.href = "Exam.html";
+
+        }
 });
