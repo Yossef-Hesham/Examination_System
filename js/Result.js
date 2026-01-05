@@ -40,18 +40,17 @@ var rawQuestions =
 safeParseJSON(sessionStorage.getItem("exam_questions")) || [];
 var rawState = safeParseJSON(sessionStorage.getItem("exam_state")) || [];
 
-console.log(rawQuestions);
-console.log(rawState);
 /* optional metadata */
-var studentName = sessionStorage.getItem("user_name") || null;
+var userName = sessionStorage.getItem("user_name") || null;
+if (userName == null)
+    window.location.href = "login.html";
+
 var studentId = sessionStorage.getItem("student_id") || null;
 
 /* duration (minutes) fallback */
 var durationMinutes = parseInt(
-sessionStorage.getItem("exam_duration_minutes"),
-10
-);
-if (!durationMinutes || isNaN(durationMinutes)) durationMinutes = 45;
+sessionStorage.getItem("exam_duration_minutes"),10);
+if (!durationMinutes || isNaN(durationMinutes)) durationMinutes = undefined;
 var totalTimeSeconds = durationMinutes * 60;
 
 /* compute startTime from exam_end_time if present */
@@ -64,17 +63,7 @@ if (endTime) startTime = endTime - totalTimeSeconds;
 var submitTime = parseInt(sessionStorage.getItem("exam_submit_time"), 10);
 if (isNaN(submitTime)) submitTime = null;
 
-/* fallback name from DOM if available (exam header) */
-try {
-if (!studentName) {
-    var domName = document.getElementById("studentName");
-    if (domName && domName.textContent) studentName = domName.textContent;
-}
-if (!studentId) {
-    var domId = document.getElementById("studentId");
-    if (domId && domId.textContent) studentId = domId.textContent;
-}
-} catch (e) {}
+
 
 /* ------------------ grading logic ------------------ */
 function gradeNow(questions, state) {
@@ -222,109 +211,123 @@ var t = setInterval(function () {
 
 /* ------------------ render results to DOM ------------------ */
 function renderResults(resultObj) {
-var pct = resultObj.percent;
-var color = colorForPercent(pct);
+    var pct = resultObj.percent;
+    var color = colorForPercent(pct);
 
-// header dynamic
-var nameText = studentName || "Student";
-titleEl.textContent = "Great Job!";
-subtitleEl.textContent =
-    "You have successfully completed the exam, " + nameText + ".";
+    // header dynamic
+    var nameText = userName || "Student";
+    titleEl.textContent = "Great Job!";
+    subtitleEl.textContent =
+        "You have successfully completed the exam, " + nameText + ".";
 
-// update cards numbers
-correctNum.textContent = resultObj.correct;
-incorrectNum.textContent = resultObj.incorrect;
+    // update cards numbers
+    correctNum.textContent = resultObj.correct;
+    incorrectNum.textContent = resultObj.incorrect;
 
-// time
-var takenSec = computeTimeTakenSeconds();
-timeTakenEl.textContent = formatMinutes(takenSec);
-
-// animate ring & number
-scoreText.textContent = "0%";
-animateScoreRing(pct, color, 1100);
-// animate center number to pct
-var centerNumEl = scoreText;
-(function animateCenter() {
-    var start = 0;
-    var end = pct;
-    var dur = 1100;
-    var steps = Math.max(12, Math.round(dur / 25));
-    var step = (end - start) / steps;
-    var cur = start;
-    var idx = 0;
-    var timer = setInterval(function () {
-    idx++;
-    cur += step;
-    if (idx >= steps) {
-        clearInterval(timer);
-        centerNumEl.innerHTML =
-        end +
-        '%<span style="display:block; font-size:12px; font-weight:600; color:var(--muted);">SCORE</span>';
-    } else {
-        centerNumEl.innerHTML =
-        Math.round(cur) +
-        '%<span style="display:block; font-size:12px; font-weight:600; color:var(--muted);">SCORE</span>';
+    // time
+    try {
+        var takenSec = resultObj.timeTakenSeconds;
+        if (!takenSec) {
+            takenSec = computeTimeTakenSeconds();
+        }
+    } catch (e) {
+        console.log("Cant find time");
     }
-    }, Math.round(dur / steps));
-})();
+    timeTakenEl.textContent = formatMinutes(takenSec);
 
-// perf bar
-perfFill.style.width = pct + "%";
-perfFill.style.backgroundColor = color;
+    // animate ring & number
+    scoreText.textContent = "0%";
+    animateScoreRing(pct, color, 1100);
+    // animate center number to pct
+    var centerNumEl = scoreText;
+    (function animateCenter() {
+        var start = 0;
+        var end = pct;
+        var dur = 1100;
+        var steps = Math.max(12, Math.round(dur / 25));
+        var step = (end - start) / steps;
+        var cur = start;
+        var idx = 0;
+        var timer = setInterval(function () {
+        idx++;
+        cur += step;
+        if (idx >= steps) {
+            clearInterval(timer);
+            centerNumEl.innerHTML =
+            end +
+            '%<span style="display:block; font-size:12px; font-weight:600; color:var(--muted);">SCORE</span>';
+        } else {
+            centerNumEl.innerHTML =
+            Math.round(cur) +
+            '%<span style="display:block; font-size:12px; font-weight:600; color:var(--muted);">SCORE</span>';
+        }
+        }, Math.round(dur / steps));
+    })();
 
-// score label (you can change text based on thresholds)
-if (pct >= 95) scoreLabel.textContent = "Excellent";
-else if (pct >= 90) scoreLabel.textContent = "Outstanding";
-else if (pct >= 75) scoreLabel.textContent = "Good Work";
-else if (pct >= 60) scoreLabel.textContent = "Needs Improvement";
-else scoreLabel.textContent = "Keep Practicing";
+    // perf bar
+    perfFill.style.width = pct + "%";
+    perfFill.style.backgroundColor = color;
 
-// store exam_result so front-end or backend can pick it
-var examResultObj = {
-    total: resultObj.total,
-    correct: resultObj.correct,
-    incorrect: resultObj.incorrect,
-    percent: resultObj.percent,
-    timeTakenSeconds: takenSec,
-    studentName: studentName,
-    studentId: studentId,
-    timestamp: Math.floor(Date.now() / 1000),
-};
-try {
-    sessionStorage.setItem("exam_result", JSON.stringify(examResultObj));
-} catch (e) {}
+    // score label (you can change text based on thresholds)
+    if (pct >= 95) scoreLabel.textContent = "Excellent";
+    else if (pct >= 90) scoreLabel.textContent = "Outstanding";
+    else if (pct >= 75) scoreLabel.textContent = "Good Work";
+    else if (pct >= 60) scoreLabel.textContent = "Needs Improvement";
+    else scoreLabel.textContent = "Keep Practicing";
 
-// show card
-resultCard.style.display = "flex";
+    // store exam_result so front-end or backend can pick it
+    var examResultObj = {
+        total: resultObj.total,
+        correct: resultObj.correct,
+        incorrect: resultObj.incorrect,
+        percent: resultObj.percent,
+        timeTakenSeconds: takenSec,
+        studentName: userName,
+        studentId: studentId,
+        timestamp: Math.floor(Date.now() / 1000),
+    };
+    try {
+        // sessionStorage.setItem("exam_result", JSON.stringify(examResultObj));
+        localStorage.setItem('exam_result', JSON.stringify(examResultObj));
+
+    } catch (e) {}
+
+    // show card
+    resultCard.style.display = "flex";
 }
 
 /* ------------------ main flow ------------------ */
 (function main() {
-// show loader for 2 seconds then compute & draw
-var LOADER_MS = 1800; // ~1.8s
-var result = gradeNow(rawQuestions, rawState);
+    // show loader for 2 seconds then compute & draw
+    var LOADER_MS = 1800; // ~1.8s
+    var result = null;
+    /* ------------------ try to load cached result ------------------ */
+    try {
+        var raw = localStorage.getItem("exam_result");
+        if (raw) {
+            result = JSON.parse(raw);
+        }
+        else
+            result = gradeNow(rawQuestions, rawState);
+    } catch (e) {
+        
+    }
+    
 
-// small delay to allow loader animation then show
-setTimeout(function () {
-    // hide loader
-    loaderWrap.className = loaderWrap.className + " hidden";
-    // render results with animation
-    renderResults(result);
-}, LOADER_MS);
+    // small delay to allow loader animation then show
+    setTimeout(function () {
+        // hide loader
+        loaderWrap.className = loaderWrap.className + " hidden";
+        // render results with animation
+        renderResults(result);
+    }, LOADER_MS);
 })();
 
 /* ------------------ actions ------------------ */
 finishBtn.onclick = function () {
 // clear exam session keys and return to dashboard
 try {
-    sessionStorage.removeItem("exam_questions");
-    sessionStorage.removeItem("exam_state");
-    sessionStorage.removeItem("exam_end_time");
-    sessionStorage.removeItem("exam_start_time");
-    sessionStorage.removeItem("exam_submit_time");
-    sessionStorage.removeItem("exam_result");
-    sessionStorage.removeItem("exam_started");
-    sessionStorage.removeItem("exam_finished");
+    sessionStorage.clear();
 } catch (e) {}
 // go back to dashboard or home
 window.location.href = "login.html";
@@ -346,7 +349,7 @@ var avatarImg = document.getElementById("avatarImg");
 
 /* fill navbar user info */
 (function fillNavbarUser() {
-  var name = studentName || "Student";
+  var name = userName || "Student";
   var id = studentId || "";
 
   navStudentName.textContent = name;

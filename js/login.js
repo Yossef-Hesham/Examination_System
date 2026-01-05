@@ -45,7 +45,12 @@ function validate_login() {
         var flag = validate_login();
         if(flag){
             sessionStorage.setItem("user_name",window.localStorage['name'] );
-            window.location.href = "Exam.html";
+            
+            var raw = localStorage.getItem("exam_result");
+            if(raw) window.location.href = "Result.html";
+
+            else    window.location.href = "Exam.html";
+            
 
         }
 });

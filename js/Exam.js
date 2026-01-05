@@ -23,7 +23,7 @@
 if (sessionStorage.getItem("exam_finished") === "true") {
   alert("This exam has already been submitted.");
   // optionally redirect
-  window.location.href = "dashboard.html";
+  window.location.href = "login.html";
 }
 /* ------------------ DOM references ------------------ */
 var studentNameEl = document.getElementById("studentName");
@@ -55,7 +55,10 @@ var backDashboardBtn = document.getElementById("backDashboardBtn");
 
 // -----------------------------------------------------------------------------------------------------
 /* ------------------ Exam meta ------------------ */
-var userName = sessionStorage.getItem("user_name")||"Abdelaziz Hesham";
+var userName = sessionStorage.getItem("user_name") //||"Abdelaziz Hesham";
+if (userName == null)
+  window.location.href = "login.html";
+
 var userId = 44812398;
 var courseName = "HTML 101 Final"
 var courseInfo = "Section 1 • Winter 2025"
@@ -70,14 +73,14 @@ courseInfoEl.textContent = courseInfo;
 /* ------------------ TIMER CONFIG ------------------ */
 
 var timerInterval = null;
-var EXAM_DURATION_MINUTES = 0.5; // change easily later
+var EXAM_DURATION_MINUTES = 1; // change easily later
 var totalTime = EXAM_DURATION_MINUTES * 60; // seconds
 var remainingTime = totalTime;
 
 
 
 
-/* ---- refresh resilience keys ---- */
+/* ---- refresh resilience keys and Timers---- */
 var EXAM_STARTED_KEY = "exam_started";
 var EXAM_START_TIME = "exam_start_time";
 var EXAM_END_KEY = "exam_end_time";
@@ -438,36 +441,13 @@ markBtn.addEventListener("click", function () {
 });
 
 
-/* ------------------ submit (placeholder) ------------------ */
-function gradeExam() {
-  var score = 0;
 
-  var detailedResults = [];
-  for (var qi = 0; qi < questions.length; qi++) {
-    var q = questions[qi];
-    var userAnswer = questionsState[qi].answer; // 0-based
-    var correctAnswer = (q.correct !== undefined) ? (q.correct - 1) : null; // convert to 0-based if exists
 
-    var isCorrect = (correctAnswer !== null) ? (userAnswer === correctAnswer) : false;
-    if (isCorrect) score++;
-
-    detailedResults.push({
-      questionId: q.id,
-      userAnswer: (userAnswer !== null ? (userAnswer + 1) : null),
-      correctAnswer: q.correct,
-      isCorrect: isCorrect
-    });
-  }
-
-  return {
-    totalQuestions: questions.length,
-    score: score,
-    results: detailedResults
-  };
-}
+/* ------------------ Close and Submittion ------------------ */
 
 function CloseExam(){
   sessionStorage.setItem("exam_finished", "true");
+  sessionStorage.setItem(EXAM_INDEX_KEY, 0);
 
   if (timerInterval) {
   clearInterval(timerInterval);
@@ -475,6 +455,8 @@ function CloseExam(){
   }
 
 }
+
+
 
 submitBtn.addEventListener("click", function () {
 
@@ -496,10 +478,7 @@ function showTimeUpModal() {
   timeUpModal.style.pointerEvents = "auto";
 
   // show modal
-  timeUpModal.classList.remove("hidden");
-
-  
-  
+  timeUpModal.classList.remove("hidden"); 
 }
 
 
@@ -583,5 +562,5 @@ viewResultsBtn.addEventListener("click", function () {
 backDashboardBtn.addEventListener("click", function () {
   // clear exam-related storage
   sessionStorage.clear();
-  window.location.href = "dashboard.html";
+  window.location.href = "login.html";
 });
