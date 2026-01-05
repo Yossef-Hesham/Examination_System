@@ -73,7 +73,7 @@ courseInfoEl.textContent = courseInfo;
 /* ------------------ TIMER CONFIG ------------------ */
 
 var timerInterval = null;
-var EXAM_DURATION_MINUTES = 1; // change easily later
+var EXAM_DURATION_MINUTES = 2; // change easily later
 var totalTime = EXAM_DURATION_MINUTES * 60; // seconds
 var remainingTime = totalTime;
 

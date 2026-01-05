@@ -50,9 +50,11 @@ function validate_register() {
             document.getElementById('has_account').innerText =
                 'Already have an account, please log in';
         } else {
+            localStorage.clear()
             localStorage.setItem('name', name);
             localStorage.setItem('email', email);
             localStorage.setItem('password', password);
+
 
             alert('Registration is successful ✅');
             window.location.href = "login.html"; // optional redirect
